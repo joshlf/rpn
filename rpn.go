@@ -9,6 +9,7 @@ const (
 	NONE  = 0
 	DUP   = 1
 	PRINT = 2
+	POP   = 3
 )
 
 func main() {
@@ -33,6 +34,9 @@ func main() {
 	PRINT:
 		The operator entered was the print operator
 
+	POP:
+		The operator entered was the pop operator
+
 	If the indicator is equal to NONE, then one of the two returned
 	functions will be the function corresponding to the operator entered.
 
@@ -50,34 +54,41 @@ func run(dup bool, n int) (int, unop, binop) {
 	// is already the equal to the value which should
 	// be pushed onto the stack.
 	if !dup {
-		fmt.Scan(&s)
-		_, err := fmt.Sscanf(s, "%d", &n)
+		for {
+			fmt.Scan(&s)
+			_, err := fmt.Sscanf(s, "%d", &n)
 
-		// If it was not a number (ie, an operator)
-		if err != nil {
-			switch s {
-			case "+":
-				return NONE, nil, add
-			case "-":
-				return NONE, nil, subtract
-			case "*":
-				return NONE, nil, multiply
-			case "/":
-				return NONE, nil, divide
-			case "|":
-				return NONE, nil, or
-			case "&":
-				return NONE, nil, and
-			case "c":
-				return NONE, negate, nil
-			case "~":
-				return NONE, not, nil
-			case "d":
-				return DUP, nil, nil
-			case "p":
-				return PRINT, nil, nil
-			case "q":
-				os.Exit(0)
+			// If it was not a number (ie, an operator)
+			if err != nil {
+				switch s {
+				case "+":
+					return NONE, nil, add
+				case "-":
+					return NONE, nil, subtract
+				case "*":
+					return NONE, nil, multiply
+				case "/":
+					return NONE, nil, divide
+				case "|":
+					return NONE, nil, or
+				case "&":
+					return NONE, nil, and
+				case "c":
+					return NONE, negate, nil
+				case "~":
+					return NONE, not, nil
+				case "dup":
+					return DUP, nil, nil
+				case "print":
+					return PRINT, nil, nil
+				case "pop":
+					return POP, nil, nil
+				case "quit":
+					os.Exit(0)
+				}
+				fmt.Println("Unrecognized command")
+			} else {
+				break
 			}
 		}
 	}
@@ -99,9 +110,15 @@ func run(dup bool, n int) (int, unop, binop) {
 				return NONE, bo(n), nil
 			}
 		case DUP:
+			// Simply set dup to true, since on next iteration of loop,
+			// run(dup, n) will be called, and n is already the correct value
 			dup = true
 		case PRINT:
 			fmt.Println(n)
+		case POP:
+			// Effectively letting the previous instance of run perform the call,
+			// but way easier than having to pass back sentinal values, etc
+			return run(false, 0)
 		}
 	}
 	return NONE, nil, nil
