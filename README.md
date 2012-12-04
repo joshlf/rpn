@@ -13,23 +13,23 @@ will result in the stack:
 
 syntax
 ======
-<b>binary operators</b>
-\+ addition
-\- subtraction
-\* multiplication
-/ division
-| bitwise or
-& bitwise and
+<b>binary operators</b>  
+\+ addition  
+\- subtraction  
+\* multiplication  
+/ division  
+| bitwise or  
+& bitwise and  
 
-<b>unary operators</b>
-c negation
-~ bitwise not
-d duplicate the value on the top of the stack
-(ie, 1 d ==> 1 1)
-p print the top value on the stack
+<b>unary operators</b>  
+c negation  
+~ bitwise not  
+d duplicate the value on the top of the stack  
+(ie, 1 d ==> 1 1)  
+p print the top value on the stack  
 
-<b>other</b>
-q quit
+<b>other</b>  
+q quit  
 
 theory
 ======
