@@ -11,17 +11,21 @@ const (
 	PRINT = 2
 	POP   = 3
 	SWAP  = 4
+	ZERO  = 5
 )
 
 func main() {
-	run(false, 0)
+	ind := ZERO
+	for ; ind == ZERO; {
+		ind, _, _ = run(false, 0)
+	}
 	fmt.Println("Invalid entry: bottom of stack reached")
 	os.Exit(1)
 }
 
 /*
-	dup indicates whether or not there was a duplicate instruction
-	if dup is true, n indicates the value to be duplicated
+	push indicates whether to push the passed value onto the stack or
+	to wait for user input.
 
 	Returns an operator indicator. This indicator can have values
 	NONE, DUP, or PRINT
@@ -40,12 +44,15 @@ func main() {
 	
 	SWAP:
 		The operator entered was the swap operator
+	
+	ZERO:
+		The operator entered was the zero operator
 
 	If the indicator is equal to NONE, then one of the two returned
 	functions will be the function corresponding to the operator entered.
 
 */
-func run(dup bool, n int) (int, unop, binop) {
+func run(push bool, n int) (int, unop, binop) {
 
 	var s string
 	var uo unop
@@ -57,7 +64,7 @@ func run(dup bool, n int) (int, unop, binop) {
 	// If the duplicate operator was entered, then n
 	// is already the equal to the value which should
 	// be pushed onto the stack.
-	if !dup {
+	if !push {
 		for {
 			fmt.Scan(&s)
 			_, err := fmt.Sscanf(s, "%d", &n)
@@ -89,6 +96,8 @@ func run(dup bool, n int) (int, unop, binop) {
 					return POP, nil, nil
 				case "swap":
 					return SWAP, nil, swap
+				case "zero":
+					return ZERO, nil, nil
 				case "quit":
 					os.Exit(0)
 				}
@@ -102,14 +111,14 @@ func run(dup bool, n int) (int, unop, binop) {
 	// Once control reaches this part of the function,
 	// n is equal to the value on the top of the stack.
 
-	dup = false
+	push = false
 
 	for {
-		ind, uo, bo = run(dup, n)
+		ind, uo, bo = run(push, n)
 		
 		TOP:
 		
-		dup = false
+		push = false
 
 		switch ind {
 		case NONE:
@@ -119,9 +128,9 @@ func run(dup bool, n int) (int, unop, binop) {
 				return NONE, bo(n), nil
 			}
 		case DUP:
-			// Simply set dup to true, since on next iteration of loop,
-			// run(dup, n) will be called, and n is already the correct value
-			dup = true
+			// Simply set push to true, since on next iteration of loop,
+			// run(push, n) will be called, and n is already the correct value
+			push = true
 		case PRINT:
 			fmt.Println(n)
 		case POP:
@@ -143,7 +152,11 @@ func run(dup bool, n int) (int, unop, binop) {
 				// Necessary to avoid double-calling run
 				goto TOP;
 			}
+		case ZERO:
+			return ZERO, nil, nil
 		}
 	}
+	
+	// Control should never reach this
 	return NONE, nil, nil
 }
