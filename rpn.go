@@ -6,22 +6,22 @@ import (
 )
 
 const (
-	NONE  = 0
-	DUP   = 1
-	PRINT = 2
-	POP   = 3
-	SWAP  = 4
-	ZERO  = 5
+	NONE = iota
+	DUP
+	PRINT
+	POP
+	SWAP
+	ZERO
 )
 
 func main() {
 	for {
 		ind := ZERO
-		for ; ind == ZERO; {
+		for ind == ZERO {
 			fmt.Print("> ")
 			ind, _, _ = run(false, 0)
 		}
-		fmt.Println("Invalid entry: bottom of stack reached")
+		fmt.Println("Invalid entry: bOpttom of stack reached")
 	}
 }
 
@@ -43,10 +43,10 @@ func main() {
 
 	POP:
 		The operator entered was the pop operator
-	
+
 	SWAP:
 		The operator entered was the swap operator
-	
+
 	ZERO:
 		The operator entered was the zero operator
 
@@ -57,8 +57,8 @@ func main() {
 func run(push bool, n int) (int, unop, binop) {
 
 	var s string
-	var uo unop
-	var bo binop
+	var uOp unop
+	var bOp binop
 
 	// Operator indicator
 	var ind int
@@ -117,18 +117,18 @@ func run(push bool, n int) (int, unop, binop) {
 	push = false
 
 	for {
-		ind, uo, bo = run(push, n)
-		
-		TOP:
-		
+		ind, uOp, bOp = run(push, n)
+
+	TOP:
+
 		push = false
 
 		switch ind {
 		case NONE:
-			if uo != nil {
-				n = uo(n)
+			if uOp != nil {
+				n = uOp(n)
 			} else {
-				return NONE, bo(n), nil
+				return NONE, bOp(n), nil
 			}
 		case DUP:
 			// Simply set push to true, since on next iteration of loop,
@@ -142,25 +142,25 @@ func run(push bool, n int) (int, unop, binop) {
 			// but way easier than having to pass back sentinal values, etc
 			return run(false, 0)
 		case SWAP:
-			if uo == nil {
-				// bo will return a function which, when given an argument,
+			if uOp == nil {
+				// bOp will return a function which, when given an argument,
 				// will discard the argument and simply return this n
-				return SWAP, bo(n), nil
+				return SWAP, bOp(n), nil
 			} else {
-				// uo will discard its argument and return the argument which
+				// uOp will discard its argument and return the argument which
 				// was passed in the previous call
-				m := uo(0)
-				ind, uo, bo = run(true, n)
+				m := uOp(0)
+				ind, uOp, bOp = run(true, n)
 				n = m
-				
+
 				// Necessary to avoid double-calling run
-				goto TOP;
+				goto TOP
 			}
 		case ZERO:
 			return ZERO, nil, nil
 		}
 	}
-	
+
 	// Control should never reach this
 	return NONE, nil, nil
 }
