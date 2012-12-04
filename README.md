@@ -26,8 +26,8 @@ syntax
 <b>~</b> bitwise not  
 <b>dup</b> duplicate the value on the top of the stack  
 (ie, 1 d ==> 1 1)  
-<b>pop</b> pop the top value off of the stack and discard it
-<b>swap</b> swap the top two values on the stack
+<b>pop</b> pop the top value off of the stack and discard it  
+<b>swap</b> swap the top two values on the stack  
 <b>print</b> print the top value on the stack  
 
 <b>other</b>  
