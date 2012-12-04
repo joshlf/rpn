@@ -10,6 +10,7 @@ const (
 	DUP   = 1
 	PRINT = 2
 	POP   = 3
+	SWAP  = 4
 )
 
 func main() {
@@ -36,6 +37,9 @@ func main() {
 
 	POP:
 		The operator entered was the pop operator
+	
+	SWAP:
+		The operator entered was the swap operator
 
 	If the indicator is equal to NONE, then one of the two returned
 	functions will be the function corresponding to the operator entered.
@@ -83,6 +87,8 @@ func run(dup bool, n int) (int, unop, binop) {
 					return PRINT, nil, nil
 				case "pop":
 					return POP, nil, nil
+				case "swap":
+					return SWAP, nil, swap
 				case "quit":
 					os.Exit(0)
 				}
@@ -100,6 +106,9 @@ func run(dup bool, n int) (int, unop, binop) {
 
 	for {
 		ind, uo, bo = run(dup, n)
+		
+		TOP:
+		
 		dup = false
 
 		switch ind {
@@ -119,6 +128,21 @@ func run(dup bool, n int) (int, unop, binop) {
 			// Effectively letting the previous instance of run perform the call,
 			// but way easier than having to pass back sentinal values, etc
 			return run(false, 0)
+		case SWAP:
+			if uo == nil {
+				// bo will return a function which, when given an argument,
+				// will discard the argument and simply return this n
+				return SWAP, bo(n), nil
+			} else {
+				// uo will discard its argument and return the argument which
+				// was passed in the previous call
+				m := uo(0)
+				ind, uo, bo = run(true, n)
+				n = m
+				
+				// Necessary to avoid double-calling run
+				goto TOP;
+			}
 		}
 	}
 	return NONE, nil, nil

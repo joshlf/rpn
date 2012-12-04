@@ -50,3 +50,9 @@ func negate(i int) int {
 func not(i int) int {
 	return ^i
 }
+
+func swap(i int) unop {
+	return func(j int) int {
+		return i
+	}
+}

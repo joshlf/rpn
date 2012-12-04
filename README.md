@@ -14,23 +14,24 @@ will result in the stack:
 syntax
 ======
 <b>binary operators</b>  
-\+ addition  
-\- subtraction  
-\* multiplication  
-/ division  
-| bitwise or  
-& bitwise and  
+<b>\+</b> addition  
+<b>\-</b> subtraction  
+<b>\*</b> multiplication  
+<b>/</b> division  
+<b>|</b> bitwise or  
+<b>&</b> bitwise and  
 
 <b>unary operators</b>  
-c negation  
-~ bitwise not  
-dup duplicate the value on the top of the stack  
+<b>c</b> negation  
+<b>~</b> bitwise not  
+<b>dup</b> duplicate the value on the top of the stack  
 (ie, 1 d ==> 1 1)  
-pop pop the top value off of the stack and discard it
-print print the top value on the stack  
+<b>pop</b> pop the top value off of the stack and discard it
+<b>swap</b> swap the top two values on the stack
+<b>print</b> print the top value on the stack  
 
 <b>other</b>  
-quit
+<b>quit</b> quit
 
 theory
 ======
