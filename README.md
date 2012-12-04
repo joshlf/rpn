@@ -13,7 +13,8 @@ will result in the stack:
 
 syntax
 ======
-<b>binary operators</b>  
+binary operators
+----------------
 <b>\+</b> addition  
 <b>\-</b> subtraction  
 <b>\*</b> multiplication  
@@ -21,7 +22,8 @@ syntax
 <b>|</b> bitwise or  
 <b>&</b> bitwise and  
 
-<b>unary operators</b>  
+unary operators
+---------------
 <b>c</b> negation  
 <b>~</b> bitwise not  
 <b>dup</b> duplicate the value on the top of the stack  
@@ -30,7 +32,8 @@ syntax
 <b>swap</b> swap the top two values on the stack  
 <b>print</b> print the top value on the stack  
 
-<b>other</b>  
+other
+----- 
 <b>quit</b> quit
 
 theory
