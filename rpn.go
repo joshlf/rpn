@@ -86,7 +86,7 @@ func run(dup bool, n int) (int, unop, binop) {
 				case "quit":
 					os.Exit(0)
 				}
-				fmt.Println("Unrecognized command")
+				fmt.Printf("Unrecognized command: %s\n", s)
 			} else {
 				break
 			}

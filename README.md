@@ -24,12 +24,13 @@ syntax
 <b>unary operators</b>  
 c negation  
 ~ bitwise not  
-d duplicate the value on the top of the stack  
+dup duplicate the value on the top of the stack  
 (ie, 1 d ==> 1 1)  
-p print the top value on the stack  
+pop pop the top value off of the stack and discard it
+print print the top value on the stack  
 
 <b>other</b>  
-q quit  
+quit
 
 theory
 ======
