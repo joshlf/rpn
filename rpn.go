@@ -15,12 +15,14 @@ const (
 )
 
 func main() {
-	ind := ZERO
-	for ; ind == ZERO; {
-		ind, _, _ = run(false, 0)
+	for {
+		ind := ZERO
+		for ; ind == ZERO; {
+			fmt.Print("> ")
+			ind, _, _ = run(false, 0)
+		}
+		fmt.Println("Invalid entry: bottom of stack reached")
 	}
-	fmt.Println("Invalid entry: bottom of stack reached")
-	os.Exit(1)
 }
 
 /*
@@ -102,6 +104,7 @@ func run(push bool, n int) (int, unop, binop) {
 					os.Exit(0)
 				}
 				fmt.Printf("Unrecognized command: %s\n", s)
+				fmt.Print("> ")
 			} else {
 				break
 			}
@@ -133,6 +136,7 @@ func run(push bool, n int) (int, unop, binop) {
 			push = true
 		case PRINT:
 			fmt.Println(n)
+			fmt.Print("> ")
 		case POP:
 			// Effectively letting the previous instance of run perform the call,
 			// but way easier than having to pass back sentinal values, etc
