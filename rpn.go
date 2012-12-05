@@ -21,7 +21,7 @@ func main() {
 			fmt.Print("> ")
 			ind, _, _ = run(false, 0)
 		}
-		fmt.Println("Invalid entry: bOpttom of stack reached")
+		fmt.Println("Invalid entry: bottom of stack reached")
 	}
 }
 
