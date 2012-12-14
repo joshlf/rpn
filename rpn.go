@@ -4,6 +4,11 @@
 
 package main
 
+/*
+	TODO: Get pop to work either as a unary operator
+	or have the main loop inspect for its return value
+*/
+
 import (
 	"fmt"
 	"os"
@@ -20,11 +25,13 @@ const (
 
 func main() {
 	for {
-		ind := ZERO
-		for ind == ZERO {
-			fmt.Print("> ")
-			ind, _, _ = run(false, 0)
-		}
+		fmt.Print("> ")
+		uOp, bOp := run(false, 0)
+		// ind := ZERO
+		// 		for ind == ZERO {
+		// 			fmt.Print("> ")
+		// 			ind, _, _ = run(false, 0)
+		// 		}
 		fmt.Println("Invalid entry: bottom of stack reached")
 	}
 }
@@ -34,7 +41,7 @@ func main() {
 	to wait for user input.
 
 	Returns an operator indicator. This indicator can have values
-	NONE, DUP, or PRINT
+	DUP, or PRINT
 
 	NONE:
 		The operator entered was a normal arithmetic operator
@@ -54,18 +61,18 @@ func main() {
 	ZERO:
 		The operator entered was the zero operator
 
-	If the indicator is equal to NONE, then one of the two returned
+	If the indicator is equal to then one of the two returned
 	functions will be the function corresponding to the operator entered.
 
 */
-func run(push bool, n int) (int, unop, binop) {
+func run(push bool, n int) (unop, binop) {
 
 	var s string
 	var uOp unop
 	var bOp binop
 
 	// Operator indicator
-	var ind int
+	// var ind int
 
 	// If the duplicate operator was entered, then n
 	// is already the equal to the value which should
@@ -79,31 +86,32 @@ func run(push bool, n int) (int, unop, binop) {
 			if err != nil {
 				switch s {
 				case "+":
-					return NONE, nil, add
+					return nil, add
 				case "-":
-					return NONE, nil, subtract
+					return nil, subtract
 				case "*":
-					return NONE, nil, multiply
+					return nil, multiply
 				case "/":
-					return NONE, nil, divide
+					return nil, divide
 				case "|":
-					return NONE, nil, or
+					return nil, or
 				case "&":
-					return NONE, nil, and
+					return nil, and
 				case "c":
-					return NONE, negate, nil
+					return negate, nil
 				case "~":
-					return NONE, not, nil
+					return not, nil
 				case "dup":
-					return DUP, nil, nil
+					return dup, nil
 				case "print":
-					return PRINT, nil, nil
+					// fmt.Println("returning print")
+					return prnt, nil
 				case "pop":
-					return POP, nil, nil
+					return nil, pop
 				case "swap":
-					return SWAP, nil, swap
-				case "zero":
-					return ZERO, nil, nil
+					return nil, swap
+				// case "zero":
+				// return ZERO, nil, nil
 				case "quit":
 					os.Exit(0)
 				}
@@ -119,52 +127,61 @@ func run(push bool, n int) (int, unop, binop) {
 	// n is equal to the value on the top of the stack.
 
 	push = false
-
+	newN := n
+	
 	for {
-		ind, uOp, bOp = run(push, n)
-
-	TOP:
-
-		push = false
-
-		switch ind {
-		case NONE:
-			if uOp != nil {
-				n = uOp(n)
-			} else {
-				return NONE, bOp(n), nil
-			}
-		case DUP:
-			// Simply set push to true, since on next iteration of loop,
-			// run(push, n) will be called, and n is already the correct value
-			push = true
-		case PRINT:
-			fmt.Println(n)
-			fmt.Print("> ")
-		case POP:
-			// Effectively letting the previous instance of run perform the call,
-			// but way easier than having to pass back sentinal values, etc
-			return run(false, 0)
-		case SWAP:
-			if uOp == nil {
-				// bOp will return a function which, when given an argument,
-				// will discard the argument and simply return this n
-				return SWAP, bOp(n), nil
-			} else {
-				// uOp will discard its argument and return the argument which
-				// was passed in the previous call
-				m := uOp(0)
-				ind, uOp, bOp = run(true, n)
-				n = m
-
-				// Necessary to avoid double-calling run
-				goto TOP
-			}
-		case ZERO:
-			return ZERO, nil, nil
+		// fmt.Printf("Recursive call for n = %d\n", n)
+		uOp, bOp = run(push, newN)
+		if uOp != nil {
+			// var newN int
+			n, push, newN = uOp(n)
+			// uOp, bOp = run(push, newN)
+		} else {
+			return bOp(n), nil
 		}
+		// 
+		// TOP:
+		// 
+		// 	push = false
+		// 
+		// 	switch ind {
+		// 	case NONE:
+		// 		if uOp != nil {
+		// 			n = uOp(n)
+		// 		} else {
+		// 			return bOp(n), nil
+		// 		}
+		// 	case DUP:
+		// 		// Simply set push to true, since on next iteration of loop,
+		// 		// run(push, n) will be called, and n is already the correct value
+		// 		push = true
+		// 	case PRINT:
+		// 		fmt.Println(n)
+		// 		fmt.Print("> ")
+		// 	case POP:
+		// 		// Effectively letting the previous instance of run perform the call,
+		// 		// but way easier than having to pass back sentinal values, etc
+		// 		return run(false, 0)
+		// 	case SWAP:
+		// 		if uOp == nil {
+		// 			// bOp will return a function which, when given an argument,
+		// 			// will discard the argument and simply return this n
+		// 			return SWAP, bOp(n), nil
+		// 		} else {
+		// 			// uOp will discard its argument and return the argument which
+		// 			// was passed in the previous call
+		// 			m := uOp(0)
+		// 			ind, uOp, bOp = run(true, n)
+		// 			n = m
+		// 
+		// 			// Necessary to avoid double-calling run
+		// 			goto TOP
+		// 		}
+		// 	case ZERO:
+		// 		return ZERO, nil, nil
+		// 	}
 	}
 
 	// Control should never reach this
-	return NONE, nil, nil
+	return nil, nil
 }
