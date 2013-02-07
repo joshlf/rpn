@@ -26,13 +26,21 @@ const (
 func main() {
 	for {
 		fmt.Print("> ")
-		uOp, bOp := run(false, 0)
+		var bOp binop
+		uOp := popBottom
+		
+		for uOp == popBottom {
+			uOp, bOp = run(false, 0)
+		}
+		
+		fmt.Println("Invalid entry: bottom of stack reached")
+		// uOp, bOp := run(false, 0)
 		// ind := ZERO
 		// 		for ind == ZERO {
 		// 			fmt.Print("> ")
 		// 			ind, _, _ = run(false, 0)
 		// 		}
-		fmt.Println("Invalid entry: bottom of stack reached")
+		// fmt.Println("Invalid entry: bottom of stack reached")
 	}
 }
 

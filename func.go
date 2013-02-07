@@ -53,6 +53,9 @@ func negate(i int) (int, bool, int) {
 	return -1 * i, false, 0
 }
 
+
+
+
 func not(i int) (int, bool, int) {
 	return ^i, false, 0
 }
@@ -71,10 +74,15 @@ func dup(i int) (int, bool, int) {
 	return i, true, i
 }
 
+func popBottom(i int) (int, bool, int) {
+	return i, false, 0
+}
+
 func pop(i int) unop {
-	return func(j int) (int, bool, int) {
-		return j, false, 0
-	}
+	return popBottom
+	// return func(j int) (int, bool, int) {
+	// 	return j, false, 0
+	// }
 }
 
 func prnt(i int) (int, bool, int) {
