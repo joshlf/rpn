@@ -124,22 +124,14 @@ func print(i int) operator {
 }
 
 func dup(i int) operator {
-	input := func() operator {
-		op := number(i)
-		return op(i)
-	}
-
-	return input()
+	op := number(i)
+	return op(i)
 }
 
 func swap(top int) operator {
 	return func(bottom int) operator {
-		input := func() operator {
-			op := number(bottom)
-			return op(top)
-		}
-
-		return input()
+		op := number(bottom)
+		return op(top)
 	}
 }
 
