@@ -4,90 +4,185 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
-/*
-	Binary operators are curried.
-*/
+type opgen func() operator
+type operator func(int) operator
 
-type unop func(int) (int, bool, int)
-type binop func(int) unop
+func input() opgen {
+	var s string
+	var n int
+	for {
+		fmt.Scan(&s)
+		_, err := fmt.Sscanf(s, "%d", &n)
 
-func add(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i + j, false, 0
+		if err != nil {
+			switch s {
+			case "+":
+				return add
+			case "-":
+				return subtract
+			case "*":
+				return multiply
+			case "/":
+				return divide
+			case "|":
+				return or
+			case "&":
+				return and
+			case "c":
+				return negate
+			case "~":
+				return not
+			case "dup":
+				return dup
+			case "print":
+				return print
+			case "pop":
+				return pop
+			case "swap":
+				return swap
+			case "zero":
+				return zero
+			case "quit":
+				os.Exit(0)
+			}
+			fmt.Printf("Unrecognized command: %s\n", s)
+			fmt.Print("> ")
+		} else {
+			break
+		}
+	}
+	return number(n)
+}
+
+func input_gen(n int) func() opgen {
+	return func() opgen {
+		return number(n)
 	}
 }
 
-func subtract(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i - j, false, 0
+func number(n int) opgen {
+	return func() operator {
+		op := run(input)
+		return op(n)
 	}
 }
 
-func multiply(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i * j, false, 0
+func add() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(i + j))
+		}
 	}
 }
 
-func divide(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i / j, false, 0
+func subtract() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(j - i))
+		}
 	}
 }
 
-func or(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i | j, false, 0
+func multiply() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(i * j))
+		}
 	}
 }
 
-func and(j int) unop {
-	return func(i int) (int, bool, int) {
-		return i & j, false, 0
+func divide() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(i / j))
+		}
 	}
 }
 
-func negate(i int) (int, bool, int) {
-	return -1 * i, false, 0
-}
-
-
-
-
-func not(i int) (int, bool, int) {
-	return ^i, false, 0
-}
-
-/*
-	Non-arithmetic operators
-*/
-
-func swap(i int) unop {
-	return func(j int) (int, bool, int) {
-		return i, true, j
+func or() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(i | j))
+		}
 	}
 }
 
-func dup(i int) (int, bool, int) {
-	return i, true, i
+func and() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(i & j))
+		}
+	}
 }
 
-func popBottom(i int) (int, bool, int) {
-	return i, false, 0
+func negate() operator {
+	return func(i int) operator {
+		return run(input_gen(-i))
+	}
 }
 
-func pop(i int) unop {
-	return popBottom
-	// return func(j int) (int, bool, int) {
-	// 	return j, false, 0
-	// }
+func not() operator {
+	return func(i int) operator {
+		return run(input_gen(^i))
+	}
 }
 
-func prnt(i int) (int, bool, int) {
-	fmt.Println(i)
-	fmt.Print("> ")
-	return i, false, 0
+func print() operator {
+	return func(i int) operator {
+		fmt.Println(i)
+		fmt.Print("> ")
+		return run(input_gen(i))
+	}
 }
 
+func dup() operator {
+	return func(i int) operator {
+
+		input := func() opgen {
+
+			return func() operator {
+				op := run(input_gen(i))
+				return op(i)
+			}
+		}
+
+		return run(input)
+	}
+}
+
+func swap() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+
+			input := func() opgen {
+				return func() operator {
+					op := run(input_gen(j))
+					return op(i)
+				}
+			}
+
+			return run(input)
+		}
+	}
+}
+
+func pop() operator {
+	return func(i int) operator {
+		return func(j int) operator {
+			return run(input_gen(j))
+		}
+	}
+}
+
+func zero() operator {
+	return zero_helper
+}
+
+func zero_helper(i int) operator {
+	return zero_helper
+}
