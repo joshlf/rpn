@@ -13,11 +13,9 @@ type operator func(int) operator
 
 func main() {
 	for {
-		for {
-			fmt.Print("> ")
-			input()
-			fmt.Println("Bottom of stack reached")
-		}
+		fmt.Print("> ")
+		input()
+		fmt.Println("Bottom of stack reached")
 	}
 }
 
