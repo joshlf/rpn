@@ -163,7 +163,7 @@ func multiply() operator {
 func divide() operator {
 	return func(i int) operator {
 		return func(j int) operator {
-			return run(in_gen(i / j))
+			return run(in_gen(j / i))
 		}
 	}
 }
