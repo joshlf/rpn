@@ -13,7 +13,7 @@ func main() {
 	for {
 		for {
 			fmt.Print("> ")
-			run(input)
+			run(in)
 			fmt.Println("Bottom of stack reached")
 		}
 	}
@@ -71,7 +71,7 @@ type input func() opgen
 func run(in input) operator {
 
 	var op opgen
-	op = input()
+	op = in()
 
 	return op()
 }
