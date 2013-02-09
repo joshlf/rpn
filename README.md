@@ -81,20 +81,40 @@ This is all very confusing, so let's look at an example to see how this works.
 Let's look at the stack "1 2 + pop". This stack should result in the empty stack. We'll use "func1 -> func2 -> func3" to mean that func1 calls func2, which calls func3, and "func1 -> func2 <- 3" to mean that func3 then returned the value 3 to func2.
 
 1:
+
 	"input" is called. The user inputs the number 1. "input" calls "number(1)":
+
 		input -> number(1)
+
+
 2:
+
 	"number(1)" calls "input":
+
 		input -> number(1) -> input
+
+
 3:
+
 	The user inputs the number 2. The current call to "input" calls "number(2)":
+
 		input -> number(1) -> input -> number(2)
+
+
 4:
+
 	"number(2)" calls "input":
+
 		input -> number(1) -> input -> number(2) -> input
+
+
 5:
+
 	The user inputs "+". The current call to "input" returns "+":
+
 		input -> number(1) -> input -> number(2) <- "+"
+
+		
 6:
 	"number(2)" applies the "+" operator to its value, 2:
 		input -> number(1) -> input -> number(2) -> +(2)
