@@ -82,16 +82,16 @@ Let's look at the stack "1 2 + pop". This stack should result in the empty stack
 
 1:
 
-	"input" is called. The user inputs the number 1. "input" calls "number(1)":
+"input" is called. The user inputs the number 1. "input" calls "number(1)":
 
-		input -> number(1)
+	input -> number(1)
 
 
 2:
 
-	"number(1)" calls "input":
+"number(1)" calls "input":
 
-		input -> number(1) -> input
+	input -> number(1) -> input
 
 
 3:
