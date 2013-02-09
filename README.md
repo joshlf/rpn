@@ -91,74 +91,133 @@ Let's look at the stack "1 2 + pop". This stack should result in the empty stack
 
 "number(1)" calls "input":
 
-	input -> number(1) -> input
+input -> number(1) -> input
 
 
 3:
 
-	The user inputs the number 2. The current call to "input" calls "number(2)":
+The user inputs the number 2. The current call to "input" calls "number(2)":
 
-		input -> number(1) -> input -> number(2)
+input -> number(1) -> input -> number(2)
 
 
 4:
 
-	"number(2)" calls "input":
+"number(2)" calls "input":
 
-		input -> number(1) -> input -> number(2) -> input
+input -> number(1) -> input -> number(2) -> input
 
 
 5:
 
-	The user inputs "+". The current call to "input" returns "+":
+The user inputs "+". The current call to "input" returns "+":
 
-		input -> number(1) -> input -> number(2) <- "+"
+input -> number(1) -> input -> number(2) <- "+"
 
-		
+
 6:
-	"number(2)" applies the "+" operator to its value, 2:
-		input -> number(1) -> input -> number(2) -> +(2)
+
+"number(2)" applies the "+" operator to its value, 2:
+
+input -> number(1) -> input -> number(2) -> +(2)
+
+
 7:
-	"+(2)" returns the operator "2+":
-		input -> number(1) -> input -> number(2) <- "2+"
+
+"+(2)" returns the operator "2+":
+
+input -> number(1) -> input -> number(2) <- "2+"
+
+
 8:
-	"number(2)" also returns "2+":
-		input -> number(1) -> input <- "2+"
+
+"number(2)" also returns "2+":
+
+input -> number(1) -> input <- "2+"
+
+
 9:
-	"input" also returns "2+":
-		input -> number(1) <- "2+"
+
+"input" also returns "2+":
+
+input -> number(1) <- "2+"
+
+
 10:
-	"number(1)" applies the "2+" operator to its value, 1:
-		input -> number(1) -> 2+(1)
+
+"number(1)" applies the "2+" operator to its value, 1:
+
+input -> number(1) -> 2+(1)
+
+
 11:
-	"2+(1)" returns the number 3 (which is an operator!). In doing this, though, it has to first call "number(3)"
-		input -> number(1) -> 2+(1) -> number(3)
+
+"2+(1)" returns the number 3 (which is an operator!). In doing this, though, it has to first call "number(3)"
+
+input -> number(1) -> 2+(1) -> number(3)
+
+
 12:
-	"number(3)" calls input:
-		input -> number(1) -> 2+(1) -> number(3) -> input
+
+"number(3)" calls input:
+
+input -> number(1) -> 2+(1) -> number(3) -> input
+
+
 13:
-	The user inputs "pop", which the current call to "input" returns:
-		input -> number(1) -> 2+(1) -> number(3) <- "pop"
+
+The user inputs "pop", which the current call to "input" returns:
+
+input -> number(1) -> 2+(1) -> number(3) <- "pop"
+
+
 14:
-	"number(3)" calls "pop" on its value, 3:
-		input -> number(1) -> 2+(1) -> number(3) -> pop(3)
+
+"number(3)" calls "pop" on its value, 3:
+
+input -> number(1) -> 2+(1) -> number(3) -> pop(3)
+
+
 15:
-	"pop(3)" returns another operator. This operator is the identity operator, "id" (the idea here is to take two arguments and only return the second one. That is, popping a value off the stack is equivalent to popping two values and then pushing back the second one):
-		input -> number(1) -> 2+(1) -> number(3) <- "id"
+
+"pop(3)" returns another operator. This operator is the identity operator, "id" (the idea here is to take two arguments and only return the second one. That is, popping a value off the stack is equivalent to popping two values and then pushing back the second one):
+
+input -> number(1) -> 2+(1) -> number(3) <- "id"
+
+
 16:
-	"number(3)" also returns "id":
-		input -> number(1) -> 2+(1) <- "id"
+
+"number(3)" also returns "id":
+
+input -> number(1) -> 2+(1) <- "id"
+
+
 17:
-	"2+(1)" also returns "id":
-		input -> number(1) <- "id"
+
+"2+(1)" also returns "id":
+
+input -> number(1) <- "id"
+
+
 18:
-	"number(1)" also returns "id":
-		input <- "id"
+
+"number(1)" also returns "id":
+
+input <- "id"
+
+
 19:
-	"input" also returns "id":
-		<- "id"
+
+"input" also returns "id":
+
+<- "id"
+
+
 20:
-	The bottom of the stack recieves "id", doesn't know what to do with it, and so it just starts over again by calling input:
-		input
+
+The bottom of the stack recieves "id", doesn't know what to do with it, and so it just starts over again by calling input:
+
+input
+
 
 Hopefully that gave you a sense of how this whole business of numbers as operators works. Reading the code should help your understanding, too. And if you have any questions, the internet is your friend. Look up "currying" and "continuation passing", since the internet is bound to have far better explanations of these than I am able to deliver.
