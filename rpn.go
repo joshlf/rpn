@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -23,8 +24,14 @@ func input() operator {
 	var s string
 	var n int
 	for {
-		fmt.Scan(&s)
-		_, err := fmt.Sscanf(s, "%d", &n)
+		_, err := fmt.Scan(&s)
+
+		if err == io.EOF {
+			fmt.Println()
+			os.Exit(0)
+		}
+
+		_, err = fmt.Sscanf(s, "%d", &n)
 
 		if err != nil {
 			switch s {
