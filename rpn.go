@@ -70,12 +70,8 @@ func input() operator {
 			break
 		}
 	}
-	return number(n)
-}
-
-func number(i int) operator {
 	op := input()
-	return op(i)
+	return op(n)
 }
 
 func add(top int) operator {
