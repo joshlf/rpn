@@ -9,7 +9,6 @@ import (
 	"io"
 	"os"
 	"reflect"
-	"runtime"
 )
 
 type operator func(int) operator
@@ -154,9 +153,7 @@ func zero(i int) operator {
 	return zero
 }
 
-func sameFunc(i, j interface{}) bool {
+func sameFunc(i, j operator) bool {
 	// Credit to http://stackoverflow.com/a/18067479/836390
-	iname := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
-	jname := runtime.FuncForPC(reflect.ValueOf(j).Pointer()).Name()
-	return iname == jname
+	return reflect.ValueOf(i).Pointer() == reflect.ValueOf(j).Pointer()
 }
