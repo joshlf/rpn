@@ -7,7 +7,7 @@ license that can be found in the LICENSE file.
 rpn
 ===
 
-An rpn calculator using no explicit stack, only recursion and continuation-passing (golang)
+An rpn calculator using no explicit stack, only recursion and function-passing (golang)
 
 usage
 =====
