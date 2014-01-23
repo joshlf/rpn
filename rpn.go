@@ -13,6 +13,28 @@ import (
 
 type operator func(int) operator
 
+var operators map[string]operator
+
+func init() {
+	// Do this in init() to avoid
+	// initialization loop
+	operators = map[string]operator{
+		"+":     add,
+		"-":     subtract,
+		"*":     multiply,
+		"/":     divide,
+		"|":     or,
+		"&":     and,
+		"c":     negate,
+		"~":     not,
+		"dup":   dup,
+		"print": print,
+		"pop":   pop,
+		"swap":  swap,
+		"zero":  zero,
+	}
+}
+
 func main() {
 	for {
 		fmt.Print("> ")
@@ -37,38 +59,16 @@ func input() operator {
 		_, err = fmt.Sscanf(s, "%d", &n)
 
 		if err != nil {
-			switch s {
-			case "+":
-				return add
-			case "-":
-				return subtract
-			case "*":
-				return multiply
-			case "/":
-				return divide
-			case "|":
-				return or
-			case "&":
-				return and
-			case "c":
-				return negate
-			case "~":
-				return not
-			case "dup":
-				return dup
-			case "print":
-				return print
-			case "pop":
-				return pop
-			case "swap":
-				return swap
-			case "zero":
-				return zero
-			case "quit":
+			if s == "quit" {
 				os.Exit(0)
 			}
-			fmt.Printf("Unrecognized command: %s\n", s)
-			fmt.Print("> ")
+			op, ok := operators[s]
+			if ok {
+				return op
+			} else {
+				fmt.Printf("Unrecognized command: %s\n", s)
+				fmt.Print("> ")
+			}
 		} else {
 			break
 		}
