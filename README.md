@@ -4,7 +4,7 @@ Use of this source code is governed by a BSD-style
 license that can be found in the LICENSE file.
 -->
 
-rpn
+rpn [![Build Status](https://travis-ci.org/joshlf13/rpn.svg?branch=master)](https://travis-ci.org/joshlf13/rpn)
 ===
 
 An rpn calculator using no explicit stack, only recursion and function-passing (golang)
