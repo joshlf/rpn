@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"strconv"
 )
 
 type operator func(int) operator
@@ -56,7 +57,7 @@ func input() operator {
 			os.Exit(0)
 		}
 
-		_, err = fmt.Sscanf(s, "%d", &n)
+		n, err = strconv.Atoi(s)
 
 		if err != nil {
 			if s == "quit" {
